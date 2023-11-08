@@ -1,24 +1,90 @@
-public class ListaTelefonica {
-    private TabelaHashListaTelefonica gride_Contatos;
+import java.util.LinkedList;
 
-    public ListaTelefonica(int sizeGride){
-        gride_Contatos = new TabelaHashListaTelefonica(sizeGride);
+public class ListaTelefonica implements TabelaHash_IF {
+    private LinkedList<Entry>[] table;
+    private int capacity;
+
+    private class Entry {
+        String name;
+        int phoneNumber;
+
+        Entry(String name, int phoneNumber) {
+            this.name = name;
+            this.phoneNumber = phoneNumber;
+        }
+    }
+    @SuppressWarnings("unchecked")
+    public ListaTelefonica(int capacity) {
+        this.capacity = capacity;
+        table = new LinkedList[capacity];
+        for (int i = 0; i < capacity; i++) {
+            table[i] = new LinkedList<>();
+        }
     }
 
-    public void addContato(Contato contato){
-        gride_Contatos.insert(contato);
+    private int hash(int element) {
+        return element % capacity;
     }
 
-    public void removContato(String name) throws Exception {
-        Contato contato = gride_Contatos.search(name);
-        gride_Contatos.remove(contato);
+    @Override
+    public void insert(int phoneNumber) {
+        insert(null, phoneNumber); 
     }
 
-    public Contato buscContato(String name) throws Exception {
-        return gride_Contatos.search(name);
+    public void insert(String name, int phoneNumber) {
+        int index = hash(phoneNumber);
+        LinkedList<Entry> bucket = table[index];
+
+        for (Entry entry : bucket) {
+            if (entry.phoneNumber == phoneNumber) {
+                entry.name = name;
+                return;
+            }
+        }
+
+        bucket.add(new Entry(name, phoneNumber));
     }
 
-    public String printList(){
-        return gride_Contatos.print();
+    @Override
+    public void remove(int phoneNumber) throws Exception {
+        int index = hash(phoneNumber);
+        LinkedList<Entry> bucket = table[index];
+
+        for (Entry entry : bucket) {
+            if (entry.phoneNumber == phoneNumber) {
+                bucket.remove(entry);
+                return;
+            }
+        }
+        throw new Exception("Número de telefone não encontrado na agenda.");
+    }
+
+    @Override
+    public int search(int phoneNumber) throws Exception {
+        int index = hash(phoneNumber);
+        LinkedList<Entry> bucket = table[index];
+
+        for (Entry entry : bucket) {
+            if (entry.phoneNumber == phoneNumber) {
+                return entry.phoneNumber;
+            }
+        }
+        throw new Exception("Número de telefone não encontrado na agenda.");
+    }
+
+    @Override
+    public String print() {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < capacity; i++) {
+            LinkedList<Entry> bucket = table[i];
+            for (Entry entry : bucket) {
+                if (entry.name != null) {
+                    result.append("Nome: ").append(entry.name).append(", Telefone: ").append(entry.phoneNumber).append("\n");
+                }
+            }
+        }
+        if(result.isEmpty()) result.append("A Agenda está vazia.");
+        return result.toString();
     }
 }

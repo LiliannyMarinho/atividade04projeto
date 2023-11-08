@@ -1,32 +1,28 @@
 public class Main {
-    public static void main(String[] args){
-        ListaTelefonica phoneBook = new ListaTelefonica(25);
+	public static void main(String[] args) {
+        ListaTelefonica agenda = new ListaTelefonica(10);
 
-        Contato contato1 = new Contato("Everaldo", "9999-9999");
-        Contato contato2 = new Contato("Tatiane","8888-8888");
-        Contato contato3 = new Contato("Lilianny", "7777-7777");
+        System.out.println("Agenda Telefônica:");
+        System.out.println(agenda.print());
 
-        phoneBook.addContato(contato1);
-        phoneBook.addContato(contato2);
-        phoneBook.addContato(contato3);
+        System.out.println("\nInserindo contatos.");
+        agenda.insert("Tatiane", 777777777);
+        agenda.insert("Lilianny", 888888888);
+        agenda.insert("Everaldo", 999999999);        
 
-        System.out.println("-------------------\nLista Telefônica\n-------------------");
-        System.out.println(phoneBook.printList());
+        System.out.println("Agenda Telefônica:");
+        System.out.println(agenda.print());
+        System.out.println("\nBuscando número:");
 
         try {
-            Contato x = phoneBook.buscContato("Everaldo");
-            System.out.println("Contato encontrado: "+x.getName());
+            int numeroTelefone = agenda.search(888888888);
+            System.out.println("Número de Telefone encontrado: " + numeroTelefone + "\n");            
+            System.out.println("\nRemovendo número: " + numeroTelefone);
+            agenda.remove(999999999);
+            System.out.println("\nAgenda Telefônica:");
+            System.out.println(agenda.print());
         } catch (Exception e) {
-            System.out.println("Contato não encontrado na lista telefônica.");
+            System.err.println(e.getMessage());
         }
-        try {
-            phoneBook.removContato("Lilianny");
-            System.out.println("Contato removido com sucesso.");
-        } catch (Exception e) {
-            System.out.println("Falha ao remover o contato: " + e.getMessage());
-        }
-
-        System.out.println("\n-------------------Lista Atualizada\n-------------------");
-        System.out.println(phoneBook.printList());
     }
 }
