@@ -8,7 +8,9 @@ public class Main {
         System.out.println("\nInserindo contatos.");
         agenda.insert("Tatiane", 777777777);
         agenda.insert("Lilianny", 888888888);
-        agenda.insert("Everaldo", 999999999);        
+        agenda.insert("Everaldo", 999999999);
+        agenda.insert("Samira",555555555);
+        agenda.insert("Matheus",444444444);        
 
         System.out.println("Agenda Telefônica:");
         System.out.println(agenda.print());
